@@ -1,10 +1,10 @@
--- Create database (normally done outside of SQL script in PostgreSQL)
+-- Создание базы данных (обычно это делается вне SQL-скрипта в PostgreSQL)
 -- CREATE DATABASE Portfolio_Management;
 
--- Connect to the database (This is an example command in psql client)
+-- Подключиться к базе данных (это пример команды в psql-клиенте)
 -- \c Portfolio_Management;
 
--- Create tables
+-- Создание таблиц
 CREATE TABLE user_details (
     user_id VARCHAR(12) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -70,9 +70,9 @@ CREATE TABLE company_performance (
     FOREIGN KEY (stock_id) REFERENCES company(stock_id)
 );
 
--- Inserts and other initializations would be similar but adjusted for any PostgreSQL specifics
+-- Вставки и другие инициализации были бы аналогичными, но с учетом любых особенностей PostgreSQL
 
--- Creating a trigger in PostgreSQL
+-- Создание триггера в PostgreSQL
 CREATE OR REPLACE FUNCTION generate_username() RETURNS TRIGGER AS $$
 BEGIN
     NEW.user_id := CONCAT(NEW.pan, SUBSTRING(NEW.dob::text, 3, 2));
@@ -85,10 +85,10 @@ BEFORE INSERT ON user_details
 FOR EACH ROW
 EXECUTE FUNCTION generate_username();
 
--- Alter user_details table to add a new column (if it was not added previously)
+-- Измените таблицу user_details, чтобы добавить новый столбец (если он не был добавлен ранее)
 ALTER TABLE user_details ADD COLUMN IF NOT EXISTS role VARCHAR(255) DEFAULT 'user';
 
--- Insert 5 users into the user_details table
+-- Вставьте 5 пользователей в таблицу user_details
 INSERT INTO user_details (user_id, dob, name, password, pan, email)
 VALUES
 ('ABCDE1234G03', '2003-06-30', 'John Doe', 'password1', 'ABCDE1234G', 'john@example.com'),
@@ -97,7 +97,7 @@ VALUES
 ('LMNER2348G09', '2009-05-31', 'Alice Brown', 'password4', 'LMNER2348G', 'alice@example.com'),
 ('DEFRE7890K03', '2003-06-05', 'Eva Wilson', 'password5', 'DEFRE7890K', 'eva@example.com');
 
--- Insert phone numbers for the users
+-- Введите номера телефонов для пользователей
 INSERT INTO phone_numbers (user_id, phone_number)
 VALUES
 ('ABCDE1234G03', '1234567890'),
@@ -106,7 +106,7 @@ VALUES
 ('LMNER2348G09', '1111111111'),
 ('DEFRE7890K03', '9999999999');
 
--- Insert 5 companies
+-- Вставьте 5 компаний
 INSERT INTO company (stock_id, stock_name, stock_price)
 VALUES
 ('AAPL', 'Apple Inc.', 150.50),
@@ -115,7 +115,7 @@ VALUES
 ('AMZN', 'Amazon.com Inc.', 3400.25),
 ('TSLA', 'Tesla, Inc.', 650.00);
 
--- Insert stocks into watchlists
+-- Добавление акций в списки наблюдения
 INSERT INTO watchlist (user_id, stock_id, stock_price)
 VALUES
 ('ABCDE1234G03', 'AAPL', 150.50),
@@ -124,7 +124,7 @@ VALUES
 ('LMNER2348G09', 'AMZN', 3400.25),
 ('DEFRE7890K03', 'TSLA', 650.00);
 
--- Insert portfolios for users
+-- Вставлять портфолио для пользователей
 INSERT INTO portfolio (user_id, buy_price, stock_id, quantity)
 VALUES
 ('ABCDE1234G03', 3400.25, 'AMZN', 23),
@@ -133,7 +133,7 @@ VALUES
 ('PQRWF4567F03', 300.75, 'MSFT', 69),
 ('LMNER2348G09', 650.00, 'TSLA', 412);
 
--- Insert additional companies
+-- Добавить дополнительные компании
 INSERT INTO company (stock_id, stock_name, stock_price)
 VALUES
 ('AAP', 'Advance Auto Parts Inc.', 200.90),
@@ -155,7 +155,7 @@ VALUES
 ('GE', 'General Electric Company', 90.20),
 ('AMD', 'Advanced Micro Devices Inc.', 120.40);
 
--- Insert transactions
+-- Вставлять проводки
 INSERT INTO transaction (date_of_purchase, user_id_purchased, stock_id, price, quantity, user_id_bought)
 VALUES
 ('2023-10-24', 'ABCDE1234G03', 'AAPL', 150.50, 10, 'XYZTE9876R13'),
@@ -164,7 +164,7 @@ VALUES
 ('2023-10-21', 'DEFRE7890K03', 'AMZN', 3400.25, 12, 'ABCDE1234G03'),
 ('2023-10-20', 'LMNER2348G09', 'TSLA', 650.00, 15, 'PQRWF4567F03');
 
--- Insert performance data for companies
+-- Вставьте данные о производительности для компаний
 INSERT INTO company_performance (open_price, close_price, date, lowest_price, highest_price, time, stock_id)
 VALUES
 (152.00, 150.50, '2023-10-24', 149.75, 152.50, '09:30:00', 'AAPL'),
@@ -173,7 +173,7 @@ VALUES
 (3405.50, 3400.25, '2023-10-24', 3399.75, 3412.00, '09:30:00', 'AMZN'),
 (655.00, 650.00, '2023-10-24', 648.50, 657.25, '09:30:00', 'TSLA');
 
--- Insert additional performance data
+-- Вставьте дополнительные данные о производительности
 INSERT INTO company_performance (open_price, close_price, date, lowest_price, highest_price, time, stock_id)
 VALUES
 (200.90, 201.50, '2023-11-19', 199.75, 203.20, '12:30:00', 'AAP'),
@@ -187,6 +187,6 @@ VALUES
 (140.30, 142.00, '2023-11-19', 138.80, 143.50, '12:30:00', 'WMT'),
 (90.20, 91.00, '2023-11-19', 89.80, 93.50, '12:30:00', 'XOM');
 
--- Insert an admin user
+-- Вставьте пользователя с правами администратора
 INSERT INTO user_details (user_id, name, password, dob, pan, email, role)
 VALUES ('admin', 'Admin', 'admin', '1990-01-01', 'ADMIN1234P', 'admin@admin.com', 'admin');
