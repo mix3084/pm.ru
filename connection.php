@@ -7,7 +7,7 @@ $host = "localhost";
 $port = "5432"; // Default port for PostgreSQL
 $dbname = "Portfolio_Management";
 $user = "postgres"; // Ensure this is the correct username for your PostgreSQL server
-$password = "root";
+$password = "postgres";
 
 // Create connection string
 $connection_string = "host={$host} port={$port} dbname={$dbname} user={$user} password={$password}";

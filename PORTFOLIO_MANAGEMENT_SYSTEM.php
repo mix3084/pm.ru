@@ -70,9 +70,9 @@ CREATE TABLE company_performance (
     FOREIGN KEY (stock_id) REFERENCES company(stock_id)
 );
 
--- Inserts and other initializations would be similar but adjusted for any PostgreSQL specifics
+-- Вставки и другие инициализации были бы аналогичными, но с учетом любых особенностей PostgreSQL
 
--- Creating a trigger in PostgreSQL
+-- Создание триггера в PostgreSQL
 CREATE OR REPLACE FUNCTION generate_username() RETURNS TRIGGER AS $$
 BEGIN
     NEW.user_id := CONCAT(NEW.pan, SUBSTRING(NEW.dob::text, 3, 2));
@@ -85,10 +85,10 @@ BEFORE INSERT ON user_details
 FOR EACH ROW
 EXECUTE FUNCTION generate_username();
 
--- Alter user_details table to add a new column (if it was not added previously)
+-- Измените таблицу user_details, чтобы добавить новый столбец (если он не был добавлен ранее)
 ALTER TABLE user_details ADD COLUMN IF NOT EXISTS role VARCHAR(255) DEFAULT 'user';
 
--- Insert 5 users into the user_details table
+-- Вставьте 5 пользователей в таблицу user_details
 INSERT INTO user_details (user_id, dob, name, password, pan, email)
 VALUES
 ('ABCDE1234G03', '2003-06-30', 'John Doe', 'password1', 'ABCDE1234G', 'john@example.com'),
