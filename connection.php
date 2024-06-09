@@ -1,52 +1,26 @@
 <?php
-/**
- * Функция для подключения к базе данных PostgreSQL с использованием PDO
- *
- * @param string $host - адрес хоста базы данных
- * @param string $port - порт базы данных
- * @param string $dbname - имя базы данных
- * @param string $user - имя пользователя базы данных
- * @param string $password - пароль пользователя базы данных
- * @return PDO - объект PDO при успешном подключении
- * @throws PDOException - выбрасывает исключение в случае ошибки подключения
- */
-function connectToDatabase($host, $port, $dbname, $user, $password) {
-	try {
-		// Формируем строку подключения
-		$dsn = "pgsql:host=$host;port=$port;dbname=$dbname;";
-		
-		// Устанавливаем параметры подключения
-		$options = [
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Режим обработки ошибок
-			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Режим выборки данных
-			PDO::ATTR_EMULATE_PREPARES => false, // Отключение эмуляции подготовленных выражений
-		];
+// Uncomment to show connection status messages
+// echo("Attempting to connect...<br>");
 
-		// Создаем новый объект PDO
-		$pdo = new PDO($dsn, $user, $password, $options);
-		return $pdo;
-	} catch (PDOException $e) {
-		// Выбрасываем исключение в случае ошибки подключения
-		throw new PDOException($e->getMessage(), (int)$e->getCode());
-	}
-}
-
-// Определение параметров подключения
+// Define connection parameters
 $host = "localhost";
-$port = "5432";
+$port = "5432"; // Default port for PostgreSQL
 $dbname = "Portfolio_Management";
-$user = "postgres";
+$user = "postgres"; // Ensure this is the correct username for your PostgreSQL server
 $password = "root";
 
-// Попытка подключения к базе данных
-try {
-	$conn = connectToDatabase($host, $port, $dbname, $user, $password);
-	echo "Connected successfully";
-} catch (PDOException $e) {
-	echo "Connection failed: " . $e->getMessage();
+// Create connection string
+$connection_string = "host={$host} port={$port} dbname={$dbname} user={$user} password={$password}";
+
+// Connect to the PostgreSQL database
+$conn = pg_connect($connection_string);
+
+// Check the connection status
+if (!$conn) {
+    echo "Connection failed.";
+} else {
+    echo "Connected successfully.<br>";
 }
-
-
 
 // Uncomment to execute a simple query example
 // $query = "SELECT * FROM user_details";

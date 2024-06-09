@@ -309,7 +309,7 @@ include("connection.php");
     <div class="cont">
 
         <div class="form sign-in">
-            <h2>Добро пожаловать</h2>
+            <h2>Добро пожаловать</h>
             <form name="form" action="login.php" method="POST" onsubmit="return validateDOB();">
             <label>
                 <span>Эл. почта</span>
