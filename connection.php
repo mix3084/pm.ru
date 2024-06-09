@@ -1,12 +1,12 @@
 <?php
-// Uncomment to show connection status messages
+// Раскомментируйте, чтобы отображать сообщения о состоянии соединения
 // echo("Attempting to connect...<br>");
 
-// Define connection parameters
+// Определение параметров подключения
 $host = "localhost";
 $port = "5432"; // Default port for PostgreSQL
 $dbname = "Portfolio_Management";
-$user = "postgres"; // Ensure this is the correct username for your PostgreSQL server
+$user = "postgres"; // Убедитесь, что это правильное имя пользователя для вашего сервера PostgreSQL
 $password = "postgres";
 
 // Create connection string
@@ -20,7 +20,7 @@ if (!$conn) {
     echo "Не удалось установить соединение.";
 }
 
-// Uncomment to execute a simple query example
+// Раскомментируйте для выполнения простого примера запроса
 // $query = "SELECT * FROM user_details";
 // $result = pg_query($conn, $query);
 // if ($result) {
@@ -31,18 +31,18 @@ if (!$conn) {
 //     echo "0 results";
 // }
 
-// Uncomment to insert data example
+// Раскомментируйте, чтобы вставить пример данных
 // $insert_query = "INSERT INTO user_details (user_id, dob, name, password, pan, email)
 // VALUES
 // ('AQC123456703', '2003-06-30', 'John Josw', 'password1', 'AQC1234567', 'john11@example.com'),
 // ('TBC123456703', '2003-06-30', 'Johny sine', 'password1', 'TBC1234567', 'johns@example.com')";
 // $insert_result = pg_query($conn, $insert_query);
 // if ($insert_result) {
-//     echo "New records created successfully";
+//     echo "Успешно созданы новые записи";
 // } else {
-//     echo "Error: " . pg_last_error($conn);
+//     echo "ОШИБКА: " . pg_last_error($conn);
 // }
 
-// Close the connection
+// Закройте соединение
 // pg_close($conn);
 ?>
