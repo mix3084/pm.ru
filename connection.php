@@ -17,9 +17,7 @@ $conn = pg_connect($connection_string);
 
 // Check the connection status
 if (!$conn) {
-    echo "Connection failed.";
-} else {
-    echo "Connected successfully.<br>";
+    echo "Не удалось установить соединение.";
 }
 
 // Uncomment to execute a simple query example
