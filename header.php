@@ -1,4 +1,7 @@
-<?php include("connection.php");?>
+<?
+// Получить имя текущего файла
+$current_file = basename($_SERVER['PHP_SELF']);
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,7 +9,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>
-		Онлайн платформа для управления инвестиционными портфелями и персональным финансовым планированием
+        <?php echo isset($title) ? $title : 'Онлайн платформа для управления инвестиционными портфелями и персональным финансовым планированием'; ?>
     </title>
 	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/assets/css/style.css">
@@ -82,81 +85,62 @@
 			</li>
 		</ul>
 	</div>
-	<div class="container my-5">
-		<ul class="nav nav-tabs" id="myTab" role="tablist">
-			<li class="nav-item" role="presentation">
-				<button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Вход</button>
-			</li>
-			<li class="nav-item" role="presentation">
-				<button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">Регистрация</button>
-			</li>
-		</ul>
-		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-				<div class="container my-5">
-					<div class="form sign-in">
-						<h2>Добро пожаловать</h2>
-						<form name="form" id="loginForm">
-							<div class="mb-3">
-								<label for="email" class="form-label">Эл. почта</label>
-								<input type="email" class="form-control" name="email" id="email" required>
-							</div>
-							<div class="mb-3">
-								<label for="password" class="form-label">Пароль</label>
-								<input type="password" class="form-control" name="password" id="password" required>
-							</div>
-							<p id="error-message" class="text-danger"></p>
-							<p class="forgot-pass">Забыли пароль?</p>
-							<br>
-							<input type="submit" class="btn btn-primary" name="signin" value="Войти">
-						</form>
-					</div>
-				</div>
-			</div>
-			<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-				<div class="container my-5">
-					<div class="form sign-up">
-						<h2>Создать аккаунт</h2>
-						<form id="registrationForm" method="POST">
-							<div class="mb-3">
-								<label for="name2" class="form-label">Имя</label>
-								<input type="text" class="form-control" name="name2" id="name2" required>
-							</div>
-							<div class="mb-3">
-								<label for="dob" class="form-label">Дата рождения</label>
-								<input type="date" class="form-control" id="dob" name="dob" required>
-							</div>
-							<div class="mb-3">
-								<label for="email2" class="form-label">Эл. почта</label>
-								<input type="email" class="form-control" name="email2" id="email2" required>
-							</div>
-							<div class="mb-3">
-								<label for="pan2" class="form-label">ИНН</label>
-								<input type="text" class="form-control" name="pan2" id="pan2" required>
-							</div>
-							<div class="mb-3">
-								<label for="password2" class="form-label">Пароль</label>
-								<input type="password" class="form-control" name="password2" id="password2" required>
-							</div>
-							<br>
-							<div id="resultMessage" class="text-success"></div>
-							<input type="submit" class="btn btn-primary" value="Регистрация">
-						</form>
-					</div>
-				</div>
+	<div class="wrapper">
+		<div class="leftside-menu menuitem-active d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary">
+			<a href="/dash.php" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+				<svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+				<span class="fs-4">Сайт</span>
+			</a>
+			<hr>
+			<ul class="nav nav-pills flex-column mb-auto">
+				<li class="nav-item">
+					<a href="/dash.php" class="nav-link link-body-emphasis<?php echo $current_file == 'dash.php' ? ' active' : ''; ?>">
+						<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+						Главная
+					</a>
+				</li>
+				<? if ($role != "admin") : ?>
+				<li>
+					<a href="/portfolio.php" class="nav-link link-body-emphasis<?php echo $current_file == 'portfolio.php' ? ' active' : ''; ?>">
+						<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+						Портфолио
+					</a>
+				</li>
+				<? endif; ?>
+				<li>
+					<a href="/stock_price.php" class="nav-link link-body-emphasis<?php echo $current_file == 'stock_price.php' ? ' active' : ''; ?>">
+						<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+						Рынок
+					</a>
+				</li>
+				<? if ($role != "admin") : ?>
+				<li>
+					<a href="/watchlist.php" class="nav-link link-body-emphasis<?php echo $current_file == 'watchlist.php' ? ' active' : ''; ?>">
+						<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+						Лист ожидания
+					</a>
+				</li>
+				<li>
+					<a href="/transaction.php" class="nav-link link-body-emphasis<?php echo $current_file == 'transaction.php' ? ' active' : ''; ?>">
+						<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+						Транзакции
+					</a>
+				</li>
+				<? endif; ?>
+			</ul>
+			<hr>
+			<div class="dropdown">
+				<a href="/dash.php" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+					<img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+					<strong><?php echo isset($username) ? $username : ''; ?></strong>
+				</a>
+				<ul class="dropdown-menu text-small shadow">
+					<li><a class="dropdown-item" href="/about.php">Редактировать</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="/logout.php">Выйти</a></li>
+				</ul>
 			</div>
 		</div>
-	</div>
-	<footer class="footer">
-		<div class="container-fluid text-muted text-center">
-			<p>&copy; <?php echo date('Y'); ?> Москва</p>
-			<p><a href="#">Правила</a> &middot; <a href="#">Соглашения</a></p>
-		</div>
-	</footer>
-	<script src="/assets/js/jquery-3.7.1.min.js"></script>
-	<script src="/assets/js/popper.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-	<script src="/assets/js/color-modes.js"></script>
-	<script src="/assets/js/scripts.js"></script>
-</body>
-</html>
+		<div class="content-page">
+			<main class="content">
+				<div class="container-fluid">

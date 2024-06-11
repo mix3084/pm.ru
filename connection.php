@@ -9,13 +9,13 @@ $dbname = "Portfolio_Management";
 $user = "postgres"; // Убедитесь, что это правильное имя пользователя для вашего сервера PostgreSQL
 $password = "postgres";
 
-// Create connection string
+// Создать строку подключения
 $connection_string = "host={$host} port={$port} dbname={$dbname} user={$user} password={$password}";
 
-// Connect to the PostgreSQL database
+// Подключение к базе данных PostgreSQL
 $conn = pg_connect($connection_string);
 
-// Check the connection status
+// Проверьте состояние подключения
 if (!$conn) {
     echo "Не удалось установить соединение.";
 }

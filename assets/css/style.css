@@ -1,0 +1,80 @@
+:root {
+    --ct-logo-lg-height: 22px;
+    --ct-logo-sm-height: 22px;
+    --ct-leftbar-width: 260px;
+    --ct-leftbar-width-md: 160px;
+    --ct-leftbar-width-sm: 70px;
+    --ct-leftbar-condensed-height: 2000px;
+    --ct-topbar-height: 0px;
+    --ct-menu-item-icon-size: 1.2rem;
+    --ct-menu-item-font-size: 0.9375rem;
+    --ct-menu-item-padding-x: 10px;
+    --ct-menu-item-padding-y: 15px;
+    --ct-menu-condensed-link-bg: #727cf5;
+    --ct-footer-height: 60px;
+    --ct-theme-card-border-width: 0px;
+}
+.wrapper {
+    height: 100%;
+    width: 100%;
+}
+.leftside-menu {
+    z-index: 1000;
+    bottom: 0;
+    top: 0;
+    position: fixed;
+    width: var(--ct-leftbar-width);
+    min-width: var(--ct-leftbar-width);
+    padding-bottom: calc(var(--ct-footer-height) + 0.75rem);
+    background: var(--ct-menu-bg);
+    -webkit-box-shadow: var(--ct-box-shadow);
+    box-shadow: var(--ct-box-shadow);
+    border-right: var(--ct-theme-card-border-width) solid var(--ct-border-color);
+    -webkit-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+}
+.content-page {
+    position: relative;
+    margin-left: var(--ct-leftbar-width);
+    min-height: calc(100vh - var(--ct-topbar-height) - 10px);
+    padding: 0 0.75rem var(--ct-footer-height);
+    -webkit-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+}
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: var(--ct-footer-height);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    color: var(--ct-emphasis-color);
+    transition: all .25s ease-in-out;
+    border-top: 1px solid var(--ct-border-color);
+    z-index: 0;
+}
+.bi {
+    vertical-align: -.125em;
+    fill: currentColor;
+}
+.btn-bd-primary {
+    --bd-violet-bg: #712cf9;
+    --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: var(--bd-violet-bg);
+    --bs-btn-border-color: var(--bd-violet-bg);
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg: #6528e0;
+    --bs-btn-hover-border-color: #6528e0;
+    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: #5a23c8;
+    --bs-btn-active-border-color: #5a23c8;
+}
+.bd-mode-toggle {
+    z-index: 9999;
+}

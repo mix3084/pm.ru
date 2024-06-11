@@ -1,9 +1,12 @@
 <?php
+$title = 'Редактировать профиль';
 include("connection.php");
 session_start();
 if (isset($_SESSION['email'])) {
 	$email = $_SESSION['email'];
-
+    $username = $_SESSION['usern'];
+    
+	$role = $_SESSION['role'];
 	// Очистите электронную почту, чтобы предотвратить внедрение SQL-кода
 	$email = pg_escape_string($conn, $email);
 
@@ -24,119 +27,55 @@ if (isset($_SESSION['email'])) {
 	}
 } else {
 	// Перенаправьте пользователя на страницу входа в систему, если он не вошел в систему
-	header("Location: login.php");
+	header("Location: index.php");
 	exit();
 }
 ?>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- FontAwesome 5 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
-    <link rel=stylesheet href='/style.css' type=text/css media=all>
-</head>
-
-<body>
-    <div class="navbar-top">
-        <div class="title">
-            <h1 onclick="window.location.href='dash.php'" style="cursor: pointer;">О пользователе</h1>
+<?php include("header.php"); ?>
+<h1><?=$title;?></h1>
+<form>
+    <div class="mb-3 row">
+        <label for="userId" class="col-sm-2 col-form-label">ID</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="userId"
+                value="<?php echo $_SESSION['user_id']; ?>">
         </div>
-        <ul>
-            <li>
-                <a href="logout.php">
-                    <i class="fa fa-sign-out-alt fa-2x"></i>
-                </a>
-            </li>
-        </ul>
     </div>
-    <div class="main">
-        <div class="card">
-            <div class="card-body">
-                <i class="fa fa-pen fa-xs edit"></i>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>ID</td>
-                            <td>:</td>
-                            <?php
-                                echo "<td>";
-                                echo $_SESSION['user_id'];
-                                echo "</td>";
-                                ?>
-                        </tr>
-                        <tr>
-                            <td>Имя</td>
-                            <td>:</td>
-                            <?php
-                                echo "<td>";
-                                echo $username;
-                                echo "</td>";
-                                ?>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>:</td>
-                            <?php
-                                echo "<td>";
-                                echo $email;
-                                echo "</td>";
-                                ?>
-                        </tr>
-                        <tr>
-                            <td>ИНН</td>
-                            <td>:</td>
-                            <?php
-                                echo "<td>";
-                                echo $pan;
-                                echo "</td>";
-                            ?>
-                        </tr>
-                        <tr>
-                            <td>Дата рождения</td>
-                            <td>:</td>
-                            <?php
-                                echo "<td>";
-                                echo $dob;
-                                echo "</td>";
-                            ?>
-                        </tr>
-                        <tr>
-                            <td>Пароль</td>
-                            <td>:</td>
-                            <?php
-                            echo "<td id='passwordField'>";
-                            echo $pass;
-                            echo "</td>";
-                            ?>
-                            <td>
-                                <button onclick="editPassword()">Поменять</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <div class="mb-3 row">
+        <label for="username" class="col-sm-2 col-form-label">Имя</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="username" value="<?php echo $username; ?>">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input type="email" readonly class="form-control-plaintext" id="email" value="<?php echo $email; ?>">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="pan" class="col-sm-2 col-form-label">ИНН</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="pan" value="<?php echo $pan; ?>">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="dob" class="col-sm-2 col-form-label">Дата рождения</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="dob" value="<?php echo $dob; ?>">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="password" class="col-sm-2 col-form-label">Пароль</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="password" readonly class="form-control-plaintext" id="password"
+                    value="<?php echo $pass; ?>">
+                <button class="btn btn-outline-secondary" type="button" onclick="editPassword()">Поменять
+                    пароль</button>
             </div>
         </div>
     </div>
-</body>
-<footer class="container">
-    <center>
-        <p>&copy; 2024 Москва</p>
-        <p class="float-center"><a href="#">Правила</a> &middot; <a href="#">Соглашения</a></p>
-    </center>
-</footer>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous">
-</script>
-<script src="/script.js"></script>
-
-</html>
+</form>
+<div id="passwordField"></div>
+<?php include("footer.php"); ?>
