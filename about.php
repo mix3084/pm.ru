@@ -1,264 +1,59 @@
 <?php
-    include("connection.php");
-    session_start();
-    if (isset($_SESSION['email'])) {
-        $email = $_SESSION['email'];
-        $sql="select * from user_details where email='$email'";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            // User found, fetch the data
-            $row = $result->fetch_assoc(); // Fetch the first row (assuming one user per email)
-            // Now you can access the username
-            $username=$row['name'];
-            $pan=$row['pan'];
-            $dob=$row['dob'];
-            $pass=$row['password'];
+include("connection.php");
+session_start();
+if (isset($_SESSION['email'])) {
+	$email = $_SESSION['email'];
 
+	// Очистите электронную почту, чтобы предотвратить внедрение SQL-кода
+	$email = pg_escape_string($conn, $email);
 
-            // Use $username as needed
-        } else {
-            // User not found
-            echo "User not found.";
-        }
+	// Подготовить заявление к исполнению
+	$sql = "SELECT * FROM user_details WHERE email = $1";
+	$result = pg_query_params($conn, $sql, array($email));
 
-        // Use the user information to personalize the dashboard
-    } else {
-        // Redirect the user to the login page if not logged in
-        header("Location: login.php");
-        exit();
-    }
+	if ($result && pg_num_rows($result) > 0) {
+		// Пользователь найден, извлеките данные
+		$row = pg_fetch_assoc($result); // Извлеките первую строку (при условии, что на каждое электронное письмо приходится один пользователь).
+		$username = $row['name'];
+		$pan = $row['pan'];
+		$dob = $row['dob'];
+		$pass = $row['password'];
+	} else {
+		// Пользователь не найден
+		echo "Пользователь не найден.";
+	}
+} else {
+	// Перенаправьте пользователя на страницу входа в систему, если он не вошел в систему
+	header("Location: login.php");
+	exit();
+}
 ?>
-
-
-<style>
-* {
-    margin: 0;
-}
-
-body {
-    background-color: #e8f5ff;
-    font-family: Arial;
-    overflow: hidden;
-}
-
-/* NavbarTop */
-.navbar-top {
-    background-color: #fff;
-    color: #333;
-    box-shadow: 0px 4px 8px 0px grey;
-    height: 70px;
-}
-
-.title {
-    font-family: 'Dancing Script', cursive;
-    padding-top: 15px;
-    position: absolute;
-    left: 45%;
-}
-
-.navbar-top ul {
-    float: right;
-    list-style-type: none;
-    margin: 0;
-    overflow: hidden;
-    padding: 18px 50px 0 40px;
-}
-
-.navbar-top ul li {
-    float: left;
-}
-
-.navbar-top ul li a {
-    color: #333;
-    padding: 14px 16px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.icon-count {
-    background-color: #ff0000;
-    color: #fff;
-    float: right;
-    font-size: 11px;
-    left: -25px;
-    padding: 2px;
-    position: relative;
-}
-
-/* End */
-
-/* Sidenav */
-.sidenav {
-    background-color: #fff;
-    color: #333;
-    border-bottom-right-radius: 25px;
-    height: 86%;
-    left: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
-    position: absolute;
-    top: 70px;
-    width: 250px;
-}
-
-.profile {
-    margin-bottom: 20px;
-    margin-top: -12px;
-    text-align: center;
-}
-
-.profile img {
-    border-radius: 50%;
-    box-shadow: 0px 0px 5px 1px grey;
-}
-
-.name {
-    font-size: 20px;
-    font-weight: bold;
-    padding-top: 20px;
-}
-
-.job {
-    font-size: 16px;
-    font-weight: bold;
-    padding-top: 10px;
-}
-
-.url, hr {
-    text-align: center;
-}
-
-.url hr {
-    margin-left: 20%;
-    width: 60%;
-}
-
-.url a {
-    color: #818181;
-    display: block;
-    font-size: 20px;
-    margin: 10px 0;
-    padding: 6px 8px;
-    text-decoration: none;
-}
-
-.url a:hover, .url .active {
-    background-color: #e8f5ff;
-    border-radius: 28px;
-    color: #000;
-    margin-left: 14%;
-    width: 65%;
-}
-
-/* End */
-
-/* Main */
-.main {
-    margin-top: 2%;
-    margin-left: 29%;
-    font-size: 28px;
-    padding: 0 10px;
-    width: 58%;
-}
-
-.main h2 {
-    color: #333;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.main .card {
-    background-color: #fff;
-    border-radius: 18px;
-    box-shadow: 1px 1px 8px 0 grey;
-    height: auto;
-    margin-bottom: 20px;
-    padding: 20px 0 20px 50px;
-}
-
-.main .card table {
-    border: none;
-    font-size: 16px;
-    height: 270px;
-    width: 80%;
-}
-
-.edit {
-    position: absolute;
-    color: #e7e7e8;
-    right: 14%;
-}
-
-.social-media {
-    text-align: center;
-    width: 90%;
-}
-
-.social-media span {
-    margin: 0 10px;
-}
-
-.fa-facebook:hover {
-    color: #4267b3 !important;
-}
-
-.fa-twitter:hover {
-    color: #1da1f2 !important;
-}
-
-.fa-instagram:hover {
-    color: #ce2b94 !important;
-}
-
-.fa-invision:hover {
-    color: #f83263 !important;
-}
-
-.fa-github:hover {
-    color: #161414 !important;
-}
-
-.fa-whatsapp:hover {
-    color: #25d366 !important;
-}
-
-.fa-snapchat:hover {
-    color: #fffb01 !important;
-}
-</style>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
-
-    <!-- Custom Css -->
-    <link rel="stylesheet" href="style.css">
-
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- FontAwesome 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link rel=stylesheet href='/style.css' type=text/css media=all>
 </head>
+
 <body>
-    <!-- Navbar top -->
     <div class="navbar-top">
         <div class="title">
             <h1 onclick="window.location.href='dash.php'" style="cursor: pointer;">О пользователе</h1>
         </div>
-
-        <!-- Navbar -->
         <ul>
             <li>
-                <a href="#sign-out" onclick="window.location.href='logout.php'">
+                <a href="logout.php">
                     <i class="fa fa-sign-out-alt fa-2x"></i>
                 </a>
             </li>
         </ul>
-        <!-- End -->
     </div>
-    <!-- End -->
     <div class="main">
         <div class="card">
             <div class="card-body">
@@ -268,7 +63,7 @@ body {
                         <tr>
                             <td>ID</td>
                             <td>:</td>
-                                <?php
+                            <?php
                                 echo "<td>";
                                 echo $_SESSION['user_id'];
                                 echo "</td>";
@@ -277,7 +72,7 @@ body {
                         <tr>
                             <td>Имя</td>
                             <td>:</td>
-                                <?php
+                            <?php
                                 echo "<td>";
                                 echo $username;
                                 echo "</td>";
@@ -319,57 +114,29 @@ body {
                             echo "</td>";
                             ?>
                             <td>
-                            <button onclick="editPassword()">Поменять</button>
+                                <button onclick="editPassword()">Поменять</button>
                             </td>
-                            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    function editPassword() {
-        var passwordField = document.getElementById('passwordField');
-        var passwordValue = passwordField.innerHTML;
-
-        // Replace label with input box and save changes button
-        passwordField.innerHTML = '<form id="passwordForm">';
-        passwordField.innerHTML += '<input type="password" name="newPassword" id="newPassword" value="' + passwordValue + '">';
-        passwordField.innerHTML += '<button type="button" onclick="saveChanges()">Save Changes</button>';
-        passwordField.innerHTML += '</form>';
-    }
-
-    function saveChanges() {
-        var newPassword = $('#newPassword').val();
-
-        // AJAX request to save the new password
-        $.ajax({
-            type: 'POST',
-            url: 'save_password.php',
-            data: { newPassword: newPassword },
-            success: function(response) {
-                // Update UI or provide feedback to the user
-                var passwordField = document.getElementById('passwordField');
-                passwordField.innerHTML = newPassword;
-                alert(response); // You can replace this with a more user-friendly notification
-            },
-            error: function(error) {
-                console.log(error);
-                alert('Error updating password.');
-            }
-        });
-    }
-</script>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
-        
     </div>
-    <!-- End -->
 </body>
-
 <footer class="container">
-        <center><p>&copy; 2024 Москва</p>
+    <center>
+        <p>&copy; 2024 Москва</p>
         <p class="float-center"><a href="#">Правила</a> &middot; <a href="#">Соглашения</a></p>
-        </center>
-        
-    </footer>
+    </center>
+</footer>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous">
+</script>
+<script src="/script.js"></script>
+
 </html>
